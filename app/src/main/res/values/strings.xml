@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SentimentAnalysis</string>
+    <string name="test">test</string>
+    <string name="compare_two_topics_to_see_what_s_more_popular_in_the_twitter_community">Compare Two Topics To See What\'s More Popular in the Twitter Community</string>
+    <string name="topic_1">topic 1</string>
+    <string name="topic_2">topic 2</string>
+    <string name="title_activity_results">Results</string>
+</resources>
