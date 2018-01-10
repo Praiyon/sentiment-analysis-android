@@ -10,14 +10,14 @@ import java.util.List;
  * Created by praiyon on 09/01/18.
  */
 
-public class SentimentConverter {
+public class SentimentFactory {
     private String result;
 
 
-    public SentimentConverter(String result){
+    SentimentFactory(String result){
         this.result = result;
     }
-    public List<Sentiment> convert(String topic) throws JSONException {
+    List<Sentiment> convert(String topic) throws JSONException {
         JSONObject object = new JSONObject(this.result)
                 .getJSONObject("data")
                 .getJSONObject(topic);

@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -76,20 +75,6 @@ public class MainActivity extends AppCompatActivity {
                             payLoadTwo = result;
                             initiateIntent();
                         }
-
-//                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-//                        if(first){
-//                            try {
-//                                restCall(secondTopicText, false);
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                        }else{
-
-                      //  }
-                        // do your work with response object
-
                     }
                 });
     }
@@ -103,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(String Response) {
                 try{
-                    SentimentConverter sentimentConverter = new SentimentConverter(Response);
-                    boolean exists = sentimentConverter.topicExists(topic);
+                    SentimentFactory sentimentFactory = new SentimentFactory(Response);
+                    boolean exists = sentimentFactory.topicExists(topic);
                     if (!exists){
                         try {
                             Thread.sleep(5000);
@@ -125,8 +110,13 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError e) {
-                e.printStackTrace();
-                Toast.makeText(MainActivity.this, e + "error", Toast.LENGTH_LONG).show();
+                try {
+                    restCall(topic);
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+//                e.printStackTrace();
+//                Toast.makeText(MainActivity.this, e + "error", Toast.LENGTH_LONG).show();
             }
         })
         {

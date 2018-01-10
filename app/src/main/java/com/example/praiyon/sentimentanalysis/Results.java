@@ -19,12 +19,12 @@ public class Results extends AppCompatActivity {
         String secondTopic = getIntent().getStringExtra("secondTopic");
         String payLoadOne =  getIntent().getStringExtra("payLoadOne");
         String payLoadTwo =  getIntent().getStringExtra("payLoadTwo");
-        SentimentConverter sentimentConverter = new SentimentConverter(payLoadOne);
-        SentimentConverter sentimentConverter1 = new SentimentConverter(payLoadTwo);
+        SentimentFactory sentimentFactory = new SentimentFactory(payLoadOne);
         try {
-            List<Sentiment> firstList = sentimentConverter
+            List<Sentiment> firstList = sentimentFactory
                     .convert(firstTopic);
-            List<Sentiment> secondList = sentimentConverter1
+            sentimentFactory.setResult(payLoadTwo);
+            List<Sentiment> secondList = sentimentFactory
                     .convert(secondTopic);
 
             TextView firstView = findViewById(R.id.firstTopicResult);
@@ -34,8 +34,8 @@ public class Results extends AppCompatActivity {
             String secondResult = average(secondList);
             firstView.setText(firstTopic+": " +firstResult);
             secondView.setText(secondTopic+": " +secondResult);
-            winner.setText("Winner is " + (Double.valueOf(firstResult) >
-                    Double.valueOf(secondResult) ? firstTopic : secondTopic) );
+            winner.setText((Double.valueOf(firstResult) >
+                    Double.valueOf(secondResult) ? firstTopic : secondTopic) + " is more favoured" );
         } catch (JSONException e) {
             e.printStackTrace();
         }
