@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     RequestQueue queue;
     static Map<String,Object> maps;
+    Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,13 +41,14 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText firstTopic = findViewById(R.id.topicOne);
         final EditText secondTopic = findViewById(R.id.topicTwo);
+        button = findViewById(R.id.create);
 
 
-        final Button CREATE = findViewById(R.id.create);
 
-        CREATE.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
+                    button.setEnabled(false);
                     firstTopicText = firstTopic.getText().toString();
                     secondTopicText = secondTopic.getText().toString();
                     restCall(firstTopic.getText().toString());
@@ -133,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initiateIntent(){
-        Intent intent = new Intent(getBaseContext(), Results.class);
+        setEnabled(true);
+        Intent intent = new Intent(getBaseContext(), FragmentActivity.class);
         intent.putExtra("payLoadOne", payLoadOne);
         intent.putExtra("payLoadTwo", payLoadTwo);
         intent.putExtra("firstTopic", firstTopicText);
@@ -155,6 +158,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return super.dispatchTouchEvent( event );
+    }
+
+    public void setEnabled(boolean value){
+        this.button.setEnabled(value);
     }
 
 }

@@ -30,8 +30,8 @@ public class Results extends AppCompatActivity {
             TextView firstView = findViewById(R.id.firstTopicResult);
             TextView secondView = findViewById(R.id.secondTopicResult);
             TextView winner = findViewById(R.id.winner);
-            String firstResult = average(firstList);
-            String secondResult = average(secondList);
+            String firstResult = sentimentFactory.average(firstList);
+            String secondResult = sentimentFactory.average(secondList);
             firstView.setText(firstTopic+": " +firstResult);
             secondView.setText(secondTopic+": " +secondResult);
             winner.setText((Double.valueOf(firstResult) >
@@ -43,13 +43,4 @@ public class Results extends AppCompatActivity {
 
     }
 
-    public String average(List<Sentiment> sentimentList){
-        Double total = 0.0;
-        for (Sentiment element : sentimentList){
-            total += element.getPolarity();
-        }
-        DecimalFormat decimalFormat = new DecimalFormat();
-        decimalFormat.applyPattern( "#,#0.00#");
-        return decimalFormat.format(total/sentimentList.size());
-    }
 }
