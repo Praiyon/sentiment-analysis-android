@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     RequestQueue queue;
     static Map<String,Object> maps;
+    Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,13 +41,14 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText firstTopic = findViewById(R.id.topicOne);
         final EditText secondTopic = findViewById(R.id.topicTwo);
+        button = findViewById(R.id.create);
 
 
-        final Button CREATE = findViewById(R.id.create);
 
-        CREATE.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
+                    button.setEnabled(false);
                     firstTopicText = firstTopic.getText().toString();
                     secondTopicText = secondTopic.getText().toString();
                     restCall(firstTopic.getText().toString());
@@ -76,20 +77,6 @@ public class MainActivity extends AppCompatActivity {
                             payLoadTwo = result;
                             initiateIntent();
                         }
-
-//                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-//                        if(first){
-//                            try {
-//                                restCall(secondTopicText, false);
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                        }else{
-
-                      //  }
-                        // do your work with response object
-
                     }
                 });
     }
@@ -103,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(String Response) {
                 try{
-                    SentimentConverter sentimentConverter = new SentimentConverter(Response);
-                    boolean exists = sentimentConverter.topicExists(topic);
+                    SentimentFactory sentimentFactory = new SentimentFactory(Response);
+                    boolean exists = sentimentFactory.topicExists(topic);
                     if (!exists){
                         try {
                             Thread.sleep(5000);
@@ -125,8 +112,13 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError e) {
-                e.printStackTrace();
-                Toast.makeText(MainActivity.this, e + "error", Toast.LENGTH_LONG).show();
+                try {
+                    restCall(topic);
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+//                e.printStackTrace();
+//                Toast.makeText(MainActivity.this, e + "error", Toast.LENGTH_LONG).show();
             }
         })
         {
@@ -143,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initiateIntent(){
-        Intent intent = new Intent(getBaseContext(), Results.class);
+        setEnabled(true);
+        Intent intent = new Intent(getBaseContext(), FragmentActivity.class);
         intent.putExtra("payLoadOne", payLoadOne);
         intent.putExtra("payLoadTwo", payLoadTwo);
         intent.putExtra("firstTopic", firstTopicText);
@@ -165,6 +158,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return super.dispatchTouchEvent( event );
+    }
+
+    public void setEnabled(boolean value){
+        this.button.setEnabled(value);
     }
 
 }

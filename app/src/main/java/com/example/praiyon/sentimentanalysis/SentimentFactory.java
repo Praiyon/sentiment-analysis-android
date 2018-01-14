@@ -3,6 +3,7 @@ package com.example.praiyon.sentimentanalysis;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,14 +11,14 @@ import java.util.List;
  * Created by praiyon on 09/01/18.
  */
 
-public class SentimentConverter {
+public class SentimentFactory {
     private String result;
 
 
-    public SentimentConverter(String result){
+    SentimentFactory(String result){
         this.result = result;
     }
-    public List<Sentiment> convert(String topic) throws JSONException {
+    List<Sentiment> convert(String topic) throws JSONException {
         JSONObject object = new JSONObject(this.result)
                 .getJSONObject("data")
                 .getJSONObject(topic);
@@ -47,6 +48,16 @@ public class SentimentConverter {
                     .getJSONObject(topic);
             int x = object.length();
             return (object.length() > 0 && object.length()<=15);
+    }
+
+    public String average(List<Sentiment> sentimentList){
+        Double total = 0.0;
+        for (Sentiment element : sentimentList){
+            total += element.getPolarity();
+        }
+        DecimalFormat decimalFormat = new DecimalFormat();
+        decimalFormat.applyPattern( "#,#0.00#");
+        return decimalFormat.format(total/sentimentList.size());
     }
 
     public String getResult() {
